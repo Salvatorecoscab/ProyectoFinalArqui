@@ -1,0 +1,365 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Fri Jun 23 00:24:01 2023
+# Process ID: 14536
+# Current directory: C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.runs/synth_1
+# Command line: vivado.exe -log LIB_LCD_INTESC_REVD.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source LIB_LCD_INTESC_REVD.tcl
+# Log file: C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.runs/synth_1/LIB_LCD_INTESC_REVD.vds
+# Journal file: C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.runs/synth_1\vivado.jou
+# Running On: Salvatore, OS: Windows, CPU Frequency: 3693 MHz, CPU Physical cores: 12, Host memory: 17120 MB
+#-----------------------------------------------------------
+source LIB_LCD_INTESC_REVD.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/utils_1/imports/synth_1/LIB_LCD_INTESC_REVD.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/utils_1/imports/synth_1/LIB_LCD_INTESC_REVD.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top LIB_LCD_INTESC_REVD -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 2668
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 1192.297 ; gain = 408.977
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'LIB_LCD_INTESC_REVD' [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/LIB_LCD_INTESC_REVD.vhd:204]
+	Parameter FPGA_CLK bound to: 100000000 - type: integer 
+	Parameter NUM_INST bound to: 15 - type: integer 
+INFO: [Synth 8-3491] module 'PROCESADOR_LCD_REVD' declared at 'C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/PROCESADOR_LCD_REVD.vhd:10' bound to instance 'u1' of component 'PROCESADOR_LCD_REVD' [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/LIB_LCD_INTESC_REVD.vhd:277]
+INFO: [Synth 8-638] synthesizing module 'PROCESADOR_LCD_REVD' [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/PROCESADOR_LCD_REVD.vhd:31]
+	Parameter FPGA_CLK bound to: 100000000 - type: integer 
+	Parameter NUM_INST bound to: 15 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'PROCESADOR_LCD_REVD' (0#1) [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/PROCESADOR_LCD_REVD.vhd:31]
+INFO: [Synth 8-3491] module 'CARACTERES_ESPECIALES_REVD' declared at 'C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/CARACTERES_ESPECIALES_REVD.vhd:4' bound to instance 'U2' of component 'CARACTERES_ESPECIALES_REVD' [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/LIB_LCD_INTESC_REVD.vhd:284]
+INFO: [Synth 8-638] synthesizing module 'CARACTERES_ESPECIALES_REVD' [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/CARACTERES_ESPECIALES_REVD.vhd:12]
+INFO: [Synth 8-256] done synthesizing module 'CARACTERES_ESPECIALES_REVD' (0#1) [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/CARACTERES_ESPECIALES_REVD.vhd:12]
+INFO: [Synth 8-256] done synthesizing module 'LIB_LCD_INTESC_REVD' (0#1) [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/LIB_LCD_INTESC_REVD.vhd:204]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1309.340 ; gain = 526.020
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1309.340 ; gain = 526.020
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1309.340 ; gain = 526.020
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.020 . Memory (MB): peak = 1309.340 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/constrs_1/new/pineslcd.xdc]
+Finished Parsing XDC File [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/constrs_1/new/pineslcd.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/constrs_1/new/pineslcd.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/LIB_LCD_INTESC_REVD_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/LIB_LCD_INTESC_REVD_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1374.891 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1374.891 ; gain = 0.000
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:11 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:11 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:11 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-3936] Found unconnected internal register 'data_s_reg' and it is trimmed from '9' to '8' bits. [C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.srcs/sources_1/imports/INTESC_LCD_8BITS_RevD/PROCESADOR_LCD_REVD.vhd:272]
+INFO: [Synth 8-802] inferred FSM for state register 'edo_reg' in module 'PROCESADOR_LCD_REVD'
+INFO: [Synth 8-802] inferred FSM for state register 'edo_enable_reg' in module 'PROCESADOR_LCD_REVD'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 iSTATE0 |                              001 |                               00
+                 iSTATE1 |                              010 |                               01
+                  iSTATE |                              100 |                               10
+*
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'edo_enable_reg' using encoding 'one-hot' in module 'PROCESADOR_LCD_REVD'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                iSTATE24 |                           000000 |                          0000000
+                iSTATE23 |                           000001 |                          0000001
+                iSTATE12 |                           000010 |                          0011110
+                 iSTATE7 |                           000011 |                          0011111
+                iSTATE21 |                           000100 |                          0000010
+                iSTATE20 |                           000101 |                          0000011
+                 iSTATE2 |                           000110 |                          0000100
+                 iSTATE0 |                           000111 |                          0000101
+                iSTATE61 |                           001000 |                          0000110
+                iSTATE59 |                           001001 |                          0000111
+                 iSTATE1 |                           001010 |                          0001000
+                  iSTATE |                           001011 |                          0001001
+                iSTATE60 |                           001100 |                          0001010
+                iSTATE57 |                           001101 |                          0001011
+                iSTATE41 |                           001110 |                          0001100
+                iSTATE40 |                           001111 |                          0001101
+                iSTATE38 |                           010000 |                          0001110
+                iSTATE35 |                           010001 |                          0001111
+                iSTATE58 |                           010010 |                          0010000
+                iSTATE56 |                           010011 |                          0010001
+                iSTATE53 |                           010100 |                          0010010
+                iSTATE52 |                           010101 |                          0010011
+                iSTATE37 |                           010110 |                          0010100
+                iSTATE34 |                           010111 |                          0010101
+                iSTATE31 |                           011000 |                          0010110
+                iSTATE30 |                           011001 |                          0010111
+                iSTATE33 |                           011010 |                          0011001
+                iSTATE29 |                           011011 |                          0011010
+                iSTATE27 |                           011100 |                          0011011
+                iSTATE18 |                           011101 |                          0011100
+                iSTATE15 |                           011110 |                          0011101
+                iSTATE39 |                           011111 |                          0100000
+                iSTATE36 |                           100000 |                          0100001
+                iSTATE32 |                           100001 |                          0100010
+                iSTATE28 |                           100010 |                          0100011
+                iSTATE19 |                           100011 |                          0100100
+                iSTATE17 |                           100100 |                          0100101
+                iSTATE13 |                           100101 |                          0100110
+                iSTATE10 |                           100110 |                          0100111
+                iSTATE16 |                           100111 |                          0101000
+                iSTATE14 |                           101000 |                          0101001
+                 iSTATE9 |                           101001 |                          0101010
+                 iSTATE6 |                           101010 |                          0101011
+                iSTATE55 |                           101011 |                          0101100
+                iSTATE54 |                           101100 |                          0101101
+                iSTATE50 |                           101101 |                          0101110
+                iSTATE47 |                           101110 |                          0101111
+                iSTATE11 |                           101111 |                          0110000
+                 iSTATE8 |                           110000 |                          0110001
+                 iSTATE4 |                           110001 |                          0110010
+                 iSTATE3 |                           110010 |                          0110011
+                iSTATE51 |                           110011 |                          0110100
+                iSTATE48 |                           110100 |                          0110101
+                iSTATE45 |                           110101 |                          0110110
+                iSTATE43 |                           110110 |                          0110111
+                iSTATE49 |                           110111 |                          0111000
+                iSTATE46 |                           111000 |                          0111001
+                iSTATE44 |                           111001 |                          0111010
+                iSTATE42 |                           111010 |                          0111011
+                iSTATE26 |                           111011 |                          0111100
+                iSTATE25 |                           111100 |                          0111101
+                iSTATE22 |                           111101 |                          1100011
+                 iSTATE5 |                           111110 |                          1100100
+*
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'edo_reg' using encoding 'sequential' in module 'PROCESADOR_LCD_REVD'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input   33 Bit       Adders := 1     
+	   2 Input   23 Bit       Adders := 1     
+	   3 Input   18 Bit       Adders := 1     
+	   2 Input   18 Bit       Adders := 1     
+	   2 Input   17 Bit       Adders := 1     
+	   2 Input    8 Bit       Adders := 3     
+	   2 Input    4 Bit       Adders := 1     
++---Registers : 
+	               40 Bit    Registers := 1     
+	               23 Bit    Registers := 1     
+	               17 Bit    Registers := 1     
+	                8 Bit    Registers := 3     
+	                7 Bit    Registers := 1     
+	                4 Bit    Registers := 2     
+	                3 Bit    Registers := 1     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   8 Input   40 Bit        Muxes := 1     
+	   2 Input   23 Bit        Muxes := 5     
+	   2 Input   10 Bit        Muxes := 1     
+	   2 Input    9 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 4     
+	  63 Input    8 Bit        Muxes := 2     
+	  11 Input    8 Bit        Muxes := 1     
+	  25 Input    8 Bit        Muxes := 1     
+	   8 Input    7 Bit        Muxes := 1     
+	  74 Input    6 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 2     
+	   4 Input    4 Bit        Muxes := 1     
+	   3 Input    3 Bit        Muxes := 1     
+	   8 Input    3 Bit        Muxes := 3     
+	   2 Input    3 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 16    
+	   3 Input    1 Bit        Muxes := 2     
+	   8 Input    1 Bit        Muxes := 2     
+	  57 Input    1 Bit        Muxes := 1     
+	   6 Input    1 Bit        Muxes := 1     
+	  10 Input    1 Bit        Muxes := 2     
+	  62 Input    1 Bit        Muxes := 2     
+	  61 Input    1 Bit        Muxes := 1     
+	  16 Input    1 Bit        Muxes := 1     
+	  56 Input    1 Bit        Muxes := 1     
+	  35 Input    1 Bit        Muxes := 1     
+	  34 Input    1 Bit        Muxes := 1     
+	  33 Input    1 Bit        Muxes := 1     
+	  29 Input    1 Bit        Muxes := 2     
+	  32 Input    1 Bit        Muxes := 2     
+	  28 Input    1 Bit        Muxes := 1     
+	  23 Input    1 Bit        Muxes := 2     
+	  38 Input    1 Bit        Muxes := 2     
+	  14 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:16 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:19 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:19 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:14 ; elapsed = 00:00:19 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |    26|
+|3     |LUT1   |    21|
+|4     |LUT2   |    64|
+|5     |LUT3   |    13|
+|6     |LUT4   |    36|
+|7     |LUT5   |    23|
+|8     |LUT6   |    80|
+|9     |MUXF7  |     4|
+|10    |FDRE   |    79|
+|11    |IBUF   |     1|
+|12    |OBUF   |    11|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:12 ; elapsed = 00:00:21 . Memory (MB): peak = 1374.891 ; gain = 526.020
+Synthesis Optimization Complete : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 1374.891 ; gain = 591.570
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1374.891 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 30 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1374.891 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: 35cf40e
+INFO: [Common 17-83] Releasing license: Synthesis
+35 Infos, 2 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:26 . Memory (MB): peak = 1374.891 ; gain = 970.641
+INFO: [Common 17-1381] The checkpoint 'C:/Users/Salvadorcoscab/Documents/vhdlPracticas/project_2/project_2.runs/synth_1/LIB_LCD_INTESC_REVD.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file LIB_LCD_INTESC_REVD_utilization_synth.rpt -pb LIB_LCD_INTESC_REVD_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri Jun 23 00:24:32 2023...
