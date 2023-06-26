@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- COPYRIGHT 2019 Jesús Eduardo Méndez Rosales
+-- COPYRIGHT 2019 Jesï¿½s Eduardo Mï¿½ndez Rosales
 --This program is free software: you can redistribute it and/or modify
 --it under the terms of the GNU General Public License as published by
 --the Free Software Foundation, either version 3 of the License, or
@@ -14,17 +14,17 @@
 --along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --
 --
---							LIBRERÍA LCD
+--							LIBRERï¿½A LCD
 --
--- Descripción: Con ésta librería podrás implementar códigos para una LCD 16x2 de manera
--- fácil y rápida, con todas las ventajas de utilizar una FPGA.
+-- Descripciï¿½n: Con ï¿½sta librerï¿½a podrï¿½s implementar cï¿½digos para una LCD 16x2 de manera
+-- fï¿½cil y rï¿½pida, con todas las ventajas de utilizar una FPGA.
 --
--- Características:
+-- Caracterï¿½sticas:
 -- 
 --	Los comandos que puedes utilizar son los siguientes:
 --
 -- LCD_INI() -> Inicializa la lcd.
---		 			 NOTA: Dentro de los paréntesis poner un vector de 2 bits para encender o apagar
+--		 			 NOTA: Dentro de los parï¿½ntesis poner un vector de 2 bits para encender o apagar
 --					 		 el cursor y activar o desactivar el parpadeo.
 --
 --		"1x" -- Cursor ON
@@ -35,11 +35,11 @@
 --   Por ejemplo: LCD_INI("10") -- Inicializar LCD con cursor encendido y sin parpadeo 
 --	
 --			
--- CHAR() -> Manda una letra mayúscula o minúscula
+-- CHAR() -> Manda una letra mayï¿½scula o minï¿½scula
 --
---				 IMPORTANTE: 1) Debido a que VHDL no es sensible a mayúsculas y minúsculas, si se quiere
---								    escribir una letra mayúscula se debe escribir una "M" antes de la letra.
---								 2) Si se quiere escribir la letra "S" mayúscula, se declara "MAS"
+--				 IMPORTANTE: 1) Debido a que VHDL no es sensible a mayï¿½sculas y minï¿½sculas, si se quiere
+--								    escribir una letra mayï¿½scula se debe escribir una "M" antes de la letra.
+--								 2) Si se quiere escribir la letra "S" mayï¿½scula, se declara "MAS"
 --											
 -- 	Por ejemplo: CHAR(A)  -- Escribe en la LCD la letra "a"
 --						 CHAR(MA) -- Escribe en la LCD la letra "A"	
@@ -47,51 +47,51 @@
 --						 CHAR(MAS)	 -- Escribe en la LCD la letra "S"	
 --	
 --
--- POS() -> Escribir en la posición que se indique.
---				NOTA: Dentro de los paréntesis se dene poner la posición de la LCD a la que se quiere ir, empezando
---						por el renglón seguido de la posición vertical, ambos números separados por una coma.
+-- POS() -> Escribir en la posiciï¿½n que se indique.
+--				NOTA: Dentro de los parï¿½ntesis se dene poner la posiciï¿½n de la LCD a la que se quiere ir, empezando
+--						por el renglï¿½n seguido de la posiciï¿½n vertical, ambos nï¿½meros separados por una coma.
 --		
---		Por ejemplo: POS(1,2) -- Manda cursor al renglón 1, poscición 2
---						 POS(2,4) -- Manda cursor al renglón 2, poscición 4		
+--		Por ejemplo: POS(1,2) -- Manda cursor al renglï¿½n 1, posciciï¿½n 2
+--						 POS(2,4) -- Manda cursor al renglï¿½n 2, posciciï¿½n 4		
 --
 --
--- CHAR_ASCII() -> Escribe un caracter a partir de su código en ASCII
---						 NOTA: Dentro de los parentesis escribir x"(número hex.)"
+-- CHAR_ASCII() -> Escribe un caracter a partir de su cï¿½digo en ASCII
+--						 NOTA: Dentro de los parentesis escribir x"(nï¿½mero hex.)"
 --
 --		Por ejemplo: CHAR_ASCII(x"40") -- Escribe en la LCD el caracter "@"
 --
 --
--- CODIGO_FIN() -> Finaliza el código. 
---						 NOTA: Dentro de los paréntesis poner cualquier número: 1,2,3,4...,8,9.
+-- CODIGO_FIN() -> Finaliza el cï¿½digo. 
+--						 NOTA: Dentro de los parï¿½ntesis poner cualquier nï¿½mero: 1,2,3,4...,8,9.
 --
 --
 -- BUCLE_INI() -> Indica el inicio de un bucle. 
---						NOTA: Dentro de los paréntesis poner cualquier número: 1,2,3,4...,8,9.
+--						NOTA: Dentro de los parï¿½ntesis poner cualquier nï¿½mero: 1,2,3,4...,8,9.
 --
 --
 -- BUCLE_FIN() -> Indica el final del bucle.
---						NOTA: Dentro de los paréntesis poner cualquier número: 1,2,3,4...,8,9.
+--						NOTA: Dentro de los parï¿½ntesis poner cualquier nï¿½mero: 1,2,3,4...,8,9.
 --
 --
--- INT_NUM() -> Escribe en la LCD un número entero.
---					 NOTA: Dentro de los paréntesis poner sólo un número que vaya del 0 al 9,
---						    si se quiere escribir otro número entero se tiene que volver
---							 a llamar la función
+-- INT_NUM() -> Escribe en la LCD un nï¿½mero entero.
+--					 NOTA: Dentro de los parï¿½ntesis poner sï¿½lo un nï¿½mero que vaya del 0 al 9,
+--						    si se quiere escribir otro nï¿½mero entero se tiene que volver
+--							 a llamar la funciï¿½n
 --
 --
--- CREAR_CHAR() -> Función que crea el caracter diseñado previamente en "CARACTERES_ESPECIALES.vhd"
---                 NOTA: Dentro de los paréntesis poner el nombre del caracter dibujado (CHAR1,CHAR2,CHAR3,..,CHAR8)
+-- CREAR_CHAR() -> Funciï¿½n que crea el caracter diseï¿½ado previamente en "CARACTERES_ESPECIALES.vhd"
+--                 NOTA: Dentro de los parï¿½ntesis poner el nombre del caracter dibujado (CHAR1,CHAR2,CHAR3,..,CHAR8)
 --								 
 --
--- CHAR_CREADO() -> Escribe en la LCD el caracter creado por medio de la función "CREAR_CHAR()"
---						  NOTA: Dentro de los paréntesis poner el nombre del caracter creado.
+-- CHAR_CREADO() -> Escribe en la LCD el caracter creado por medio de la funciï¿½n "CREAR_CHAR()"
+--						  NOTA: Dentro de los parï¿½ntesis poner el nombre del caracter creado.
 --
 --     Por ejemplo: 
 --
 --				Dentro de CARACTERES_ESPECIALES.vhd se dibujan los caracteres personalizados utilizando los vectores 
 --				"CHAR_1", "CHAR_2","CHAR_3",...,"CHAR_7","CHAR_8"
 --
---								 '1' => [#] - Se activa el pixel de la matríz.
+--								 '1' => [#] - Se activa el pixel de la matrï¿½z.
 --                       '0' => [ ] - Se desactiva el pixel de la matriz.
 --
 -- 			Si se quiere crear el				Entonces CHAR_1 queda de la siguiente
@@ -108,7 +108,7 @@
 -- 		  8 [ ][ ][ ][ ][ ]							"00000";			
 --
 --		
---			Como el caracter se creó en el vector "CHAR_1",entonces se escribe en las funciónes como "CHAR1"
+--			Como el caracter se creï¿½ en el vector "CHAR_1",entonces se escribe en las funciï¿½nes como "CHAR1"
 --			
 --			CREAR_CHAR(CHAR1)  -- Crea el caracter personalizado (CHAR1)
 --			CHAR_CREADO(CHAR1) -- Muestra en la LCD el caracter creado (CHAR1)		
@@ -116,18 +116,18 @@
 -- 
 --
 -- LIMPIAR_PANTALLA() -> Manda a limpiar la LCD.
---								 NOTA: Ésta función se activa poniendo dentro de los paréntesis
+--								 NOTA: ï¿½sta funciï¿½n se activa poniendo dentro de los parï¿½ntesis
 --										 un '1' y se desactiva con un '0'. 
 --
---		Por ejemplo: LIMPIAR_PANTALLA('1') -- Limpiar pantalla está activado.
---						 LIMPIAR_PANTALLA('0') -- Limpiar pantalla está desactivado.
+--		Por ejemplo: LIMPIAR_PANTALLA('1') -- Limpiar pantalla estï¿½ activado.
+--						 LIMPIAR_PANTALLA('0') -- Limpiar pantalla estï¿½ desactivado.
 --
 --
 --	Con los puertos de entrada "CORD" y "CORI" se hacen corrimientos a la derecha y a la
 --	izquierda respectivamente. NOTA: La velocidad del corrimiento se puede cambiar 
 -- modificando la variable "DELAY_COR".
 --
--- Algunas funciónes generan un vector ("BLCD") cuando se terminó de ejecutar dicha función y
+-- Algunas funciï¿½nes generan un vector ("BLCD") cuando se terminï¿½ de ejecutar dicha funciï¿½n y
 --	que puede ser utilizado como una bandera, el vector solo dura un ciclo de instruccion.
 --	   
 --		LCD_INI() ---------- BLCD <= x"01"
@@ -142,22 +142,22 @@
 --	 	CHAR_CREADO() ------ BLCD <= x"0A"
 --
 --
---		¡IMPORTANTE!
+--		ï¿½IMPORTANTE!
 --		
---		1) Se deberá especificar el número de instrucciones en la constante "NUM_INSTRUCCIONES". El valor 
---			de la última instrucción es el que se colocará
---		2) En caso de utilizar a la librería como TOP del diseño, se deberá comentar el puerto genérico y 
+--		1) Se deberï¿½ especificar el nï¿½mero de instrucciones en la constante "NUM_INSTRUCCIONES". El valor 
+--			de la ï¿½ltima instrucciï¿½n es el que se colocarï¿½
+--		2) En caso de utilizar a la librerï¿½a como TOP del diseï¿½o, se deberï¿½ comentar el puerto genï¿½rico y 
 --			descomentar la constante "FPGA_CLK" para especificar la frecuencia de reloj.
---		3) Cada función se acompaña con " INST(NUM) <= <FUNCIÓN> " como lo muestra en el código
+--		3) Cada funciï¿½n se acompaï¿½a con " INST(NUM) <= <FUNCIï¿½N> " como lo muestra en el cï¿½digo
 -- 		demostrativo.
 --
 --
---                CÓDIGO DEMOSTRATIVO
+--                Cï¿½DIGO DEMOSTRATIVO
 --
 		
 --
 -- 	INST(0) <= LCD_INI("11"); 		-- INICIALIZAMOS LCD, CURSOR A HOME, CURSOR ON, PARPADEO ON.
--- 	INST(1) <= POS(1,1);				-- EMPEZAMOS A ESCRIBIR EN LA LINEA 1, POSICIÓN 1
+-- 	INST(1) <= POS(1,1);				-- EMPEZAMOS A ESCRIBIR EN LA LINEA 1, POSICIï¿½N 1
 -- 	INST(2) <= CHAR(MH);				-- ESCRIBIMOS EN LA LCD LA LETRA "h" MAYUSCULA
 -- 	INST(3) <= CHAR(O);			
 -- 	INST(4) <= CHAR(L);
@@ -171,29 +171,32 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 USE WORK.COMANDOS_LCD_REVD.ALL;
+use ieee.numeric_std.all;
 
 entity LIB_LCD_INTESC_REVD is
 
 GENERIC(
-			FPGA_CLK : INTEGER := 100_000_000
+			FPGA_CLK : INTEGER := 100_000_000;
+            stable_time : INTEGER := 10
 );
 
 
 PORT(CLK: IN STD_LOGIC;
-
+        
 -----------------------------------------------------
 ------------------PUERTOS DE LA LCD------------------
 	  RS 		  : OUT STD_LOGIC;							--
 	  RW		  : OUT STD_LOGIC;							--
 	  ENA 	  : OUT STD_LOGIC;							--
-	  DATA_LCD : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)   --
+	  DATA_LCD : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);   --
 -----------------------------------------------------
 -----------------------------------------------------
 	  
 	  
 -----------------------------------------------------------
 --------------ABAJO ESCRIBE TUS PUERTOS--------------------	
-	 	
+	 upb,downb,enterb : in STD_logic
+
 -----------------------------------------------------------
 -----------------------------------------------------------
 
@@ -204,11 +207,11 @@ end LIB_LCD_INTESC_REVD;
 architecture Behavioral of LIB_LCD_INTESC_REVD is
 
 
-CONSTANT NUM_INSTRUCCIONES : INTEGER := 15; 	--INDICAR EL NÚMERO DE INSTRUCCIONES PARA LA LCD
+CONSTANT NUM_INSTRUCCIONES : INTEGER := 20; 	--INDICAR EL Nï¿½MERO DE INSTRUCCIONES PARA LA LCD
 
 
 --------------------------------------------------------------------------------
--------------------------SEÑALES DE LA LCD (NO BORRAR)--------------------------
+-------------------------SEï¿½ALES DE LA LCD (NO BORRAR)--------------------------
 																										--
 component PROCESADOR_LCD_REVD is																--
 																										--
@@ -256,14 +259,26 @@ signal vector_mem 	  : STD_LOGIC_VECTOR(8  DOWNTO 0) := (others => '0');		--
 signal c1s,c2s,c3s,c4s : std_logic_vector(39 downto 0) := (others => '0');		--
 signal c5s,c6s,c7s,c8s : std_logic_vector(39 downto 0) := (others => '0'); 	--
 signal dir_mem 		  : integer range 0 to NUM_INSTRUCCIONES := 0;				--
-																							--
+																						--
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-
+COMPONENT debounce IS 
+    GENERIC(
+      clk_freq    : INTEGER;   --system clock frequency in Hz
+      stable_time : INTEGER);  --time button must remain stable in ms
+    PORT(
+      clk     : IN  STD_LOGIC;   --input clock
+      reset_n : IN  STD_LOGIC;   --asynchornous active-low reset
+      button  : IN  STD_LOGIC;   --input signal to be debounced
+      result  : OUT STD_LOGIC);  --debounced signal
+  END COMPONENT;
 --------------------------------------------------------------------------------
----------------------------AGREGA TUS SEÑALES AQUÍ------------------------------
+---------------------------AGREGA TUS SEï¿½ALES AQUï¿½------------------------------
 signal letrasel: std_logic_vector(7 DOWNTO 0):="01100001";
+signal upsignal,downsignal, entersignal,upbefore,downbefore,enterbefore: std_logic;
+signal init:std_logic;
+signal vidas:std_logic_vector(7 downto 0):="00000101";
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
@@ -291,11 +306,11 @@ VECTOR_MEM <= INST(DIR_MEM);											 --
 
 
 -------------------------------------------------------------------
----------------ESCRIBE TU CÓDIGO PARA LA LCD-----------------------
+---------------ESCRIBE TU Cï¿½DIGO PARA LA LCD-----------------------
 
  	INST(0) <= LCD_INI("11");
     INST(1)  <= LCD_INI("00"); 		-- INICIALIZAMOS LCD, CURSOR A HOME, CURSOR ON, PARPADEO ON.
- 	INST(2) <= POS(1,1);				-- EMPEZAMOS A ESCRIBIR EN LA LINEA 1, POSICIÓN 1
+ 	INST(2) <= POS(1,1);				-- EMPEZAMOS A ESCRIBIR EN LA LINEA 1, POSICIï¿½N 1
  	INST(3) <= CHAR(ML);				-- ESCRIBIMOS EN LA LCD LA LETRA "h" MAYUSCULA
  	INST(4) <= CHAR(I);			
  	INST(5) <= CHAR(F);
@@ -307,8 +322,13 @@ VECTOR_MEM <= INST(DIR_MEM);											 --
     INST(11) <= CHAR(e);
     INST(12) <= CHAR(l);
     INST(13) <= CHAR_ASCII(X"3A"); -- ESCRIBIMOS EL CARACTER ":"
-    INST(14) <= CHAR_ASCII(letrasel); 
-    INST(15) <= CODIGO_FIN(1);
+    INST(14)   <=BUCLE_INI(1);
+    INST(15) <= POS(1,15);
+    INST(16) <= CHAR_ASCII(letrasel); --pinta el caracter en la posicion adecuada
+    INST(17) <= POS(1,7);
+    INST(18) <= INT_NUM(to_integer(unsigned(vidas)));--pinta las vidas en la posicion adecuada
+    INST(19)   <=BUCLE_FIN(1);
+    INST(20) <= CODIGO_FIN(1);
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
@@ -316,14 +336,49 @@ VECTOR_MEM <= INST(DIR_MEM);											 --
 
 
 -------------------------------------------------------------------
---------------------ESCRIBE TU CÓDIGO DE VHDL----------------------
-
-
+--------------------ESCRIBE TU Cï¿½DIGO DE VHDL----------------------
+debounce_up: debounce
+      GENERIC MAP(clk_freq => FPGA_CLK, stable_time => stable_time)
+      PORT MAP(clk => clk, reset_n => '1', button => upb, result =>upsignal);
+debounce_down: debounce
+      GENERIC MAP(clk_freq => FPGA_CLK, stable_time => stable_time)
+      PORT MAP(clk => clk, reset_n => '1', button => downb, result =>downsignal);
+debounce_enter: debounce
+      GENERIC MAP(clk_freq => FPGA_CLK, stable_time => stable_time)
+      PORT MAP(clk => clk, reset_n => '1', button => enterb, result =>entersignal);
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
-
-
+select_letter: process(clk) is
+variable i:integer;
+    begin
+        if init='1' then
+        i:=0;
+        
+        elsif rising_edge(clk) then
+           
+                if upsignal = '0' and upbefore = '1' then
+                    if(letrasel<x"7a") then
+                        letrasel<=std_logic_vector(to_unsigned(to_integer(unsigned( letrasel )) + 1, 8));
+                    else
+                        letrasel<=x"61";
+                    end if;
+                end if;
+                upbefore <= upsignal;
+            
+           
+                 if downsignal = '0' and downbefore = '1' then
+                    if(letrasel>x"61") then
+                        letrasel<=std_logic_vector(to_unsigned(to_integer(unsigned( letrasel )) - 1, 8));
+                    else
+                        letrasel<=x"7a";
+                    end if;
+            end if;
+                downbefore <= downsignal;
+           
+           
+        end if;
+    end process;
 
 
 end Behavioral;

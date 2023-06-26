@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date         : Fri Jun 23 00:24:58 2023
-| Host         : Salvatore running 64-bit major release  (build 9200)
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Fri Jun 23 15:50:20 2023
+| Host         : ef90e86c16f4 running 64-bit Ubuntu 22.04.2 LTS
 | Command      : report_control_sets -verbose -file LIB_LCD_INTESC_REVD_control_sets_placed.rpt
 | Design       : LIB_LCD_INTESC_REVD
 | Device       : xc7a35t
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |     9 |
-|    Minimum number of control sets                        |     9 |
+| Total control sets                                       |    14 |
+|    Minimum number of control sets                        |    14 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    25 |
+| Unused register locations in slices containing registers |    44 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,15 +39,15 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |     9 |
+| Total control sets |    14 |
 | >= 0 to < 4        |     1 |
-| >= 4 to < 6        |     2 |
+| >= 4 to < 6        |     4 |
 | >= 6 to < 8        |     1 |
-| >= 8 to < 10       |     3 |
+| >= 8 to < 10       |     2 |
 | >= 10 to < 12      |     0 |
 | >= 12 to < 14      |     0 |
 | >= 14 to < 16      |     0 |
-| >= 16              |     2 |
+| >= 16              |     6 |
 +--------------------+-------+
 * Control sets can be remapped at either synth_design or opt_design
 
@@ -58,12 +58,12 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |               8 |            5 |
+| No           | No                    | No                     |              19 |           10 |
 | No           | No                    | Yes                    |               0 |            0 |
 | No           | Yes                   | No                     |               0 |            0 |
-| Yes          | No                    | No                     |              30 |           17 |
+| Yes          | No                    | No                     |              56 |           23 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |              41 |           11 |
+| Yes          | Yes                   | No                     |              89 |           25 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
@@ -74,14 +74,19 @@ Table of Contents
 |  Clock Signal  |             Enable Signal            |      Set/Reset Signal      | Slice Load Count | Bel Load Count | Bels / Slice |
 +----------------+--------------------------------------+----------------------------+------------------+----------------+--------------+
 |  CLK_IBUF_BUFG | u1/RS_i_2_n_0                        | u1/RS_i_1_n_0              |                1 |              1 |         1.00 |
-|  CLK_IBUF_BUFG | u1/dir_salto_mem[3]_i_1_n_0          |                            |                1 |              4 |         4.00 |
-|  CLK_IBUF_BUFG | u1/dir_mem_s[3]_i_1_n_0              |                            |                2 |              4 |         2.00 |
+|  CLK_IBUF_BUFG | debounce_up/upbefore_reg             | debounce_down/SS[0]        |                2 |              4 |         2.00 |
+|  CLK_IBUF_BUFG | debounce_down/E[0]                   | debounce_down/SS[1]        |                2 |              4 |         2.00 |
+|  CLK_IBUF_BUFG | u1/dir_mem_s[4]_i_1_n_0              |                            |                1 |              5 |         5.00 |
+|  CLK_IBUF_BUFG | u1/dir_salto_mem[4]_i_1_n_0          |                            |                1 |              5 |         5.00 |
 |  CLK_IBUF_BUFG | u1/FSM_sequential_edo[5]_i_1_n_0     |                            |                5 |              6 |         1.20 |
-|  CLK_IBUF_BUFG |                                      |                            |                5 |              8 |         1.60 |
-|  CLK_IBUF_BUFG | u1/DATA[7]_i_1_n_0                   |                            |                7 |              8 |         1.14 |
 |  CLK_IBUF_BUFG | u1/data_s[7]_i_1_n_0                 |                            |                2 |              8 |         4.00 |
+|  CLK_IBUF_BUFG | u1/DATA[7]_i_1_n_0                   |                            |                7 |              8 |         1.14 |
 |  CLK_IBUF_BUFG | u1/FSM_onehot_edo_enable_reg_n_0_[1] | u1/conta_enable            |                5 |             17 |         3.40 |
+|  CLK_IBUF_BUFG |                                      |                            |               10 |             19 |         1.90 |
+|  CLK_IBUF_BUFG | debounce_up/count[0]_i_2_n_0         | debounce_up/counter_set    |                5 |             20 |         4.00 |
+|  CLK_IBUF_BUFG | debounce_down/count[0]_i_2__0_n_0    | debounce_down/counter_set  |                5 |             20 |         4.00 |
 |  CLK_IBUF_BUFG | u1/conta_delay[22]_i_2_n_0           | u1/conta_delay[22]_i_1_n_0 |                5 |             23 |         4.60 |
+|  CLK_IBUF_BUFG | u1/vec_ram[6]_i_1_n_0                |                            |                7 |             24 |         3.43 |
 +----------------+--------------------------------------+----------------------------+------------------+----------------+--------------+
 
 
