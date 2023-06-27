@@ -195,7 +195,7 @@ PORT(CLK: IN STD_LOGIC;
 	  
 -----------------------------------------------------------
 --------------ABAJO ESCRIBE TUS PUERTOS--------------------	
-	 upb,downb,enterb : in STD_logic
+	 upb,downb,enterb,reset : in STD_logic
 
 -----------------------------------------------------------
 -----------------------------------------------------------
@@ -275,17 +275,264 @@ COMPONENT debounce IS
   END COMPONENT;
 --------------------------------------------------------------------------------
 ---------------------------AGREGA TUS SE�ALES AQU�------------------------------
+-----------------------------Funciones---------------------------
+--AdderSubstractor
+procedure add (a: in std_logic_vector;
+               b: in std_logic_vector;
+               ctr: in std_logic;
+               Z: out std_logic_vector;
+               overflow: out std_logic;
+               carry: out std_logic)is
+    variable sum: std_logic_vector(a'length downto 0);
+    variable carryv,bs: std_logic;
+
+begin
+   
+    sum := (others => '0');
+    carryv := ctr;
+
+    for i in 0 to a'length-1 loop
+        bs:= ctr xor b(i);
+        sum(i) := a(i) xor bs xor carryv;
+        carryv := (a(i) and bs) or (a(i) and carryv) or (bs and carryv);
+    end loop;
+    Z:= sum(a'length-1 downto 0);
+    carry:=carryv;
+    overflow:= carryv xor sum(a'length-1);
+    
+end procedure add;
+procedure multiply(
+    a : in std_logic_vector; 
+    b : in std_logic_vector;
+    m : out std_logic_vector) is
+    variable pv : std_logic_vector(a'length+b'length-1 downto 0);
+    variable bp : std_logic_vector(a'length+b'length-1 downto 0);
+    variable carry : std_logic;
+    variable ov : std_logic;
+begin
+    pv := (others => '0');
+    bp := "00000000"&b;
+    for i in 0 to a'length-1 loop
+        if a(i) = '1' then
+            add(pv, bp, '0',pv,ov,carry);
+        end if;
+        bp := bp(a'length+b'length-2 downto 0) & '0';
+    end loop;
+    m := pv;
+end procedure multiply;
+procedure div8(
+    numer: in std_logic_vector(15 downto 0);
+    denom: in std_logic_vector(7 downto 0);
+    quotient: out std_logic_vector(7 downto 0);
+    remainder: out std_logic_vector(7 downto 0)
+) is 
+variable d, n1: std_logic_vector(8 downto 0);
+variable n2: std_logic_vector(7 downto 0);
+variable carry: std_logic;
+variable overflow: std_logic;
+begin
+    d := '0' & denom;
+    n2 := numer(7 downto 0);
+    n1 := '0' & numer(15 downto 8);
+    
+    for i in 0 to 7 loop
+        n1 := n1(7 downto 0) & n2(7);
+        n2 := n2(6 downto 0) & '0';
+        
+        if n1 >= d then
+            add(n1, d, '1', n1, carry, overflow);
+            n2(0) := '1';
+        end if;
+    end loop;
+    
+    quotient := n2;
+    remainder := n1(7 downto 0);
+end procedure;
+
+procedure div16(
+    a: in std_logic_vector(15 downto 0);
+    b: in std_logic_vector(7 downto 0);
+    d: out std_logic_vector(15 downto 0)) is
+variable remh, reml, quoth, qoutl: std_logic_vector(7 downto 0);
+begin
+    div8("00000000" & a(15 downto 8), b, quoth, remh);
+    div8(remh & a(7 downto 0), b, qoutl, reml);
+    d(15 downto 8) := quoth;
+    d(7 downto 0) := qoutl;
+end procedure;
+
+procedure comp1 (
+    x: in std_logic;
+    y: in std_logic;
+    variable gin: in std_logic;
+    variable lin: in std_logic;
+    variable gout: out std_logic;
+    variable lout: out std_logic;
+    variable eout: out std_logic
+) is
+
+begin
+    gout:= (x and not y) or (x and gin) or (not y and gin);
+    eout:=(not x and not y and not gin and not lin)or(x and y and not gin and not lin);
+    lout:=(not x and y) or (not x and lin) or (y and lin);
+
+end procedure;
+
+procedure comparer (
+    variable a : in std_logic_vector;
+    variable b : in std_logic_vector;
+    signal enable: in std_logic;
+    variable gt : out std_logic;
+    variable eq : out std_logic;
+    variable lt : out std_logic
+)is
+    variable g,l,e: std_logic_vector(a'length downto 0);
+
+begin
+ if(enable = '1')then
+    g(0):='0';
+    l(0):='0';
+    for i in 0 to a'length-1 loop
+        comp1(a(i),b(i),g(i),l(i),g(i+1),l(i+1),e(i+1));
+    end loop;
+    eq:=e(a'length);
+    gt:=g(a'length);
+    lt:=l(a'length);
+    else
+    eq:='0';
+    gt:='0';
+    lt:='0';
+    end if;
+end procedure;
+
+
+
+procedure alu ( a: in std_logic_vector(15 downto 0); 
+                b: in std_logic_vector(15 downto 0); 
+                F: in std_logic_vector(3 downto 0); 
+                Z: out std_logic_vector(15 downto 0); 
+                carry : out std_logic;
+                overflow: out std_logic;
+                Zero: out std_logic; 
+                Neg: out std_logic) is
+    variable zfv: std_logic;
+    variable Zv: std_logic_vector(15 downto 0);
+    begin
+        carry:='0';
+        overflow:='0';
+        zfv:='0';
+        case F is
+            when "0001" => Zv := not a;
+            when "0010" => add("0000000000000000",a,'1',Zv,overflow,carry);-- complemento a 2
+            when "0011" => Zv := a and b;
+            when "0100" => Zv := a or b;
+            when "0101" => Zv := a(14 downto 0) & '0';
+            when "0110" => Zv := a(a'length-1)&a(a'length-1 downto 1);
+            when "0111" => add(a,b,'0',Zv,overflow,carry);--suma
+            when "1000" => add(a,b,'1',Zv,overflow,carry);--resta
+            when "1001" => multiply(a(7 downto 0), b(7 downto 0),Zv);--multiplicacion 8 bits
+            when "1010" => 
+            div16(a,b(7 downto 0),Zv); --division 16/8 bits
+         
+            when others => Zv := (others=>'0');
+        end case;
+        for i in 0 to 15 loop
+            zfv:= zfv or Zv(i);
+        end loop;
+        Zero:= not zfv;
+        Neg:= Zv(15);
+        Z := Zv;
+    end procedure alu;
+    
+------------------Maquina de estadoos-----------------------
+
+type ROM_MEMORY_array is array(0 to 275) of std_logic_vector(15 downto 0);
+constant Content: ROM_MEMORY_array:=(
+--  0 => "01100001000000000",--a,
+--  1 => "01100010000000000",--b,
+--  2 => "01110010000000000",--r,
+--  3 => "01100000000000001",--a,
+--  4 => "01100011000000000",--c,
+--  5 => "01100001000000000",--a,
+--  6 => "01100100000000000",--d,
+--  7 => "01100001000000000",--a,
+--  8 => "01100010000000000",--b,
+--  9 => "01110010000000000",--r,
+--  10 => "01100001000000000",-- a,
+--  11 => "000000000000000000",--,
+--  12 => "000000000000000000",--,
+--  13 => "000000000000000000",--,
+--  14 => "000000000000000000",--,
+--  15 => "000000000000000000",--,
+--  12 => "01100011000000000",--c,
+--  13 => "01101111000000000",--o,
+--  14 => "01101101000000000",--m,
+--  15 => "01110000000000000",--p,
+--  16 => "01110101000000000",--u,
+--  17 => "01110100000000000",--t,
+--  18 => "01100001000000000",--a,
+--  19 => "01100100000000000",--d,
+--  20 => "01101111000000000",--o,
+--  21 => "01110010000000000",--r,
+--  22 => "01100001000000000",--a,
+--  23 => "000000000000000000",--,
+--  24 => "01101000000000000",--h,
+--  25 => "01101111000000000",--o,
+--  26 => "01111100000000000",--l,
+--  27 => "01100001000000000",--a,
+  -- 28 => "00000000000000000", -- ,
+  29 => "1101101000000000", -- SEND DISP "inicio" 
+  30 => "1011011000000001", -- LOAD DIRECTO R3 -> 1
+  31 => "0000001000000000", -- SEND R3 -> ACC
+  32 => "0111000000000000", -- ADD R1 + ACC store R1
+  33 => "0000010000001010", -- Save r1 in ram(10)
+  34 => "1011101100001010", -- LOAD RAM (10) -> R4
+  35 => "1111010000000000", -- se queda en halt hasta que se aprieta enter y guarda la letra en R1
+  36 => "1111000000000000",
+OTHERS => "0000000000000000"
+);
+type RAM_MEMORY_array is array(0 to 10) of std_logic_vector(15 downto 0);
+signal ContentRAM : RAM_MEMORY_array:= (others=>(others=>'0'));
+type pospalabra_array is array(0 to 10) of std_logic_vector(7 downto 0);
+signal ContentPalabra : pospalabra_array:= (
+    1=>"00000000",
+    2=>"00001100",
+    3=>"00010111"
+);
+
+type estados is (init, fetch, decode, load,load1,load2, operation,operation1,endprog,send, cmp, cmp2, intruJMP,jmp,jalr,jalr2,comp,bnc,bnz,bnv,move,bs,ret, bnz2, bs2, leds, leds_clear, cmp_leds, cmp_leds2,cmp_leds3,cmp_leds4,cmp_leds5,save_regE);
+signal estado:estados;
+
+
+signal letra1:std_logic_vector(7 downto 0);
+signal letra2:std_logic_vector(7 downto 0);
+signal letra3:std_logic_vector(7 downto 0);
+signal letra4:std_logic_vector(7 downto 0);
+signal letra5:std_logic_vector(7 downto 0);
+signal letra6:std_logic_vector(7 downto 0);
+signal letra7:std_logic_vector(7 downto 0);
+signal letra8:std_logic_vector(7 downto 0);
+signal letra9:std_logic_vector(7 downto 0);
+signal letra10:std_logic_vector(7 downto 0);
+signal letra11:std_logic_vector(7 downto 0);
+signal letra12:std_logic_vector(7 downto 0);
+signal letra13:std_logic_vector(7 downto 0);
+signal letra14:std_logic_vector(7 downto 0);
+signal letra15:std_logic_vector(7 downto 0);
+signal letra16:std_logic_vector(7 downto 0);
 signal letrasel: std_logic_vector(7 DOWNTO 0):="01100001";
 signal upsignal,downsignal, entersignal,upbefore,downbefore,enterbefore: std_logic;
-signal init:std_logic;
+signal reset_n:std_logic;
 signal vidas:std_logic_vector(7 downto 0):="00000101";
+signal rg1,rg2,rg3, rg4, rg5, pcsig,ret_sig,equal,dato_cmp_1,dato_cmp_2: std_logic_vector(15 downto 0);
+signal getenterinicial:std_logic:='0';
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
 
 begin
 
-
+reset_n<=not reset;
 ---------------------------------------------------------------
 -------------------COMPONENTES PARA LCD------------------------
 																				 --
@@ -339,22 +586,22 @@ VECTOR_MEM <= INST(DIR_MEM);											 --
 --------------------ESCRIBE TU C�DIGO DE VHDL----------------------
 debounce_up: debounce
       GENERIC MAP(clk_freq => FPGA_CLK, stable_time => stable_time)
-      PORT MAP(clk => clk, reset_n => '1', button => upb, result =>upsignal);
+      PORT MAP(clk => clk, reset_n => reset_n, button => upb, result =>upsignal);
 debounce_down: debounce
       GENERIC MAP(clk_freq => FPGA_CLK, stable_time => stable_time)
-      PORT MAP(clk => clk, reset_n => '1', button => downb, result =>downsignal);
+      PORT MAP(clk => clk, reset_n => reset_n, button => downb, result =>downsignal);
 debounce_enter: debounce
       GENERIC MAP(clk_freq => FPGA_CLK, stable_time => stable_time)
-      PORT MAP(clk => clk, reset_n => '1', button => enterb, result =>entersignal);
+      PORT MAP(clk => clk, reset_n => reset_n, button => enterb, result =>entersignal);
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
 select_letter: process(clk) is
-variable i:integer;
+
     begin
-        if init='1' then
-        i:=0;
-        
+        if reset='1' then
+        letrasel<=x"61";
+        getenterinicial<='0';
         elsif rising_edge(clk) then
            
                 if upsignal = '0' and upbefore = '1' then
@@ -377,9 +624,637 @@ variable i:integer;
                 downbefore <= downsignal;
            
            
+           
+           if entersignal = '0' and enterbefore = '1' then
+                    getenterinicial<='1';
+            end if;
+                enterbefore <= entersignal;
         end if;
     end process;
+    
+ -- Pseudoaleatory word selector
+ pseudoaleatory: process (clk, reset) is
+ variable count:integer:=0;
+  begin
+ if reset='1' then 
+    count:=0;
+ elsif rising_edge(clk) then
+    if getenterinicial='1' then
+        ContentRAM(0)<=ContentPalabra(count);
+    else
+        if(count<3) then
+            count:=count+1;
+         else
+            count:=0;
+         end if;
+      
+ end if;
+    end if;
 
+ 
+ end process;   
+    
+    
+----CPU
+
+
+process (dato_cmp_1,dato_cmp_2) is
+    variable g,l,e: std_logic_vector(dato_cmp_1'length downto 0);
+begin
+ if(enable_cmp = '1')then
+    g(0):='0';
+    l(0):='0';
+    for i in 0 to 15 loop
+        comp1(dato_cmp_1(i),dato_cmp_2(i),g(i),l(i),g(i+1),l(i+1),e(i+1));
+    end loop;
+    eq_cmp<=e(15);
+    gt_cmp<=g(15);
+    lt_cmp<=l(15);
+    else
+    eq_cmp<='0';
+    gt_cmp<='0';
+    lt_cmp<='0';
+    end if;
+end process;
+
+
+
+process (clk, reset) is
+variable actual, sig: estados;
+
+variable pcvar,dato1,dato2: std_logic_vector(15 downto 0);
+variable mdr: std_logic_vector(15 downto 0);
+
+variable res: std_logic_vector(15 downto 0);
+variable pcreg,ret_pc: std_logic_vector(7 downto 0);
+variable mar: std_logic_vector(7 downto 0);
+variable resaum: std_logic_vector(11 downto 0);
+variable cir: std_logic_vector(7 downto 0);
+variable acc,regA,regB,regC,regD,regE,op1: std_logic_vector(15 downto 0):= "0000000000000000";
+variable nu1,nu2,nu3,nu4,eq,gt,lt: std_logic;
+variable carry :  std_logic;
+variable overflow: std_logic;
+variable zero: std_logic;
+variable Neg: std_logic;
+variable num: std_logic_vector(15 downto 0); 
+variable validation_regE: std_logic := '0';
+
+begin
+if reset='1' then
+    actual := init;
+elsif rising_edge (clk) then
+    
+                actual:=sig;
+case actual is 
+     --              INIT            --
+	when init=>
+	pcreg:="";---Aqui inicia el programa
+	if getenterinicial='0'then
+        sig:=init;
+    else
+	   sig:=fetch;
+	end if;
+	--            FETCH            --
+	when fetch=>
+	mar:=pcreg;
+	mdr:= Content(to_integer(unsigned(pcreg)));
+	cir:= Content(to_integer(unsigned(pcreg)))(15 downto 8);
+	alu("00000000"&pcreg,"0000000000000001","0111",pcvar,nu1,nu2,nu3,nu4); -- Aqui se suma el pcreg
+	pcreg:=pcvar(7 downto 0);
+	sig:=decode;
+	
+    --              DECODE          --
+    when decode=>
+    case cir(7 downto 4) is
+    
+    when "0000" => -- SEND ACC
+    mar:=mdr(7 downto 0);
+    case cir(3 downto 0) is
+        when "0000"=>acc:=regA;-- SEND ACC
+        when "0001"=>acc:=regB;
+        when "0010"=>acc:=regC;
+        when "0011"=>acc:=regD;
+        when "0100"=>ContentRAM(to_integer(unsigned(mar)))<=regA;-- carga la RAM con los datos del registro
+        when "0101"=>ContentRAM(to_integer(unsigned(mar)))<=regB;
+        when "0110"=>ContentRAM(to_integer(unsigned(mar)))<=regC;
+        when "0111"=>ContentRAM(to_integer(unsigned(mar)))<=regC;
+        when others=>acc:=(others=>'0');
+        end case;
+    sig:=fetch;
+    
+    when "0001" => -- NOT A
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "0010" => -- COMP 2
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "0011" => -- AND
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "0100" => -- OR
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "0101" => -- LSR
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "0110" => -- ASR
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "0111" =>     -- ADD
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "1000" => -- SUBTRACT
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "1001" => -- MULTI
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+    
+    when "1010" => -- DIVIDE
+    mar:=mdr(7 downto 0);
+    sig:=operation;
+   
+    when "1011" => -- LOAD
+    mar:=mdr(7 downto 0);
+    sig:=load;
+    
+    when "1100" => -- JUMPS
+    sig:=intruJMP;
+    
+    when "1101" => -- SEND DISP
+    mar:=mdr(7 downto 0);
+--    if(validation_regE = '1')then
+--        sal <= regE;
+--    else
+--        case cir(3 downto 0) is
+--        when "0000"=>sal<=regA;
+--        when "0001"=>sal<=regB;
+--        when "0010"=>sal<=regC;
+--        when "0011"=>sal<=regD;
+--        when others=>sal<=(others=>'0');
+--        end case;
+--    end if;
+    
+    sig:=send;
+    
+    when "1110"=> -- COMPARADOR
+    sig:=comp;
+    
+    when "1111" => -- END PROGRAM
+    
+    sig:=endprog;
+    when others=>sig:=init;
+    end case;
+    
+    --             EXECUTE            --
+    when intruJMP=>
+    case cir(3 downto 0) is
+        when "0000"=>sig:=jmp;
+        when "0001"=>sig:=jalr;
+        when "0010"=>sig:=bnz;
+        when "0011"=>sig:=bs;
+        when "0100"=>sig:=bnc;
+        when "0101"=>sig:=bnv;
+        when "0110"=>sig:=ret;
+        when "0111"=>sig:=leds;
+        when "1000"=>sig:=leds_clear;
+        when "1001"=>sig:=cmp_leds;
+        when "1010"=>sig:=save_regE;
+        when others=>sig:=jmp;
+    end case;
+    
+    
+    --              load specific register            ---
+    
+    when load=>
+        mdr:= Content(to_integer(unsigned(mar)));
+        sig:=load1;
+    when load1=>
+        
+        case cir(3 downto 0) is 
+        when "0000"=>regA:=mdr;--carga desde rom
+        when "0001"=>regB:=mdr;
+        when "0010"=>regC:=mdr;
+        when "0011"=>regD:=mdr;
+        when "0100"=>regA:= "00000000"&mar;--carga directa
+        when "0101"=>regB:= "00000000"&mar;
+        when "0110"=>regC:= "00000000"&mar;
+        when "0111"=>regD:= "00000000"&mar;
+        when "1000"=>regA:=ContentRAM(to_integer(unsigned(mar)));--carga desde ram
+        when "1001"=>regB:=ContentRAM(to_integer(unsigned(mar)));
+        when "1010"=>regC:=ContentRAM(to_integer(unsigned(mar)));
+        when "1011"=>regD:=ContentRAM(to_integer(unsigned(mar)));
+        when "1100"=>
+            case mar(7 downto 0) is
+                when "00"=>
+                regA:=Content(to_integer(unsigned(regA)));--carga de rom
+                when "01"=>
+                regB:=Content(to_integer(unsigned(regA)));--carga de rom
+                when "10"=>
+                regC:=Content(to_integer(unsigned(regA)));--carga de rom
+                when "11"=>
+                regD:=Content(to_integer(unsigned(regA)));--carga de rom
+                when others=>null;
+            end case;
+        
+        when "1101"=>
+           case mar(7 downto 0) is
+                when "00"=>
+                regA:=Content(to_integer(unsigned(regB)));--carga de rom
+                when "01"=>
+                regB:=Content(to_integer(unsigned(regB)));--carga de rom
+                when "10"=>
+                regC:=Content(to_integer(unsigned(regB)));--carga de rom
+                when "11"=>
+                regD:=Content(to_integer(unsigned(regB)));--carga de rom
+                when others=>null;
+            end case;
+        when "1110"=>
+            case mar(7 downto 0) is
+                    when "00"=>
+                    regA:=Content(to_integer(unsigned(regC)));--carga de rom
+                    when "01"=>
+                    regB:=Content(to_integer(unsigned(regC)));--carga de rom
+                    when "10"=>
+                    regC:=Content(to_integer(unsigned(regC)));--carga de rom
+                    when "11"=>
+                    regD:=Content(to_integer(unsigned(regC)));--carga de rom
+                    when others=>null;
+                end case;
+        when "1111"=>
+        case mar(7 downto 0) is
+                when "00"=>
+                regA:=Content(to_integer(unsigned(regD)));--carga de rom
+                when "01"=>
+                regB:=Content(to_integer(unsigned(regD)));--carga de rom
+                when "10"=>
+                regC:=Content(to_integer(unsigned(regD)));--carga de rom
+                when "11"=>
+                regD:=Content(to_integer(unsigned(regD)));--carga de rom
+                when others=>null;
+            end case;
+        when others=>sig:=init;
+        end case;        
+
+    sig:=fetch;
+    
+  
+    --                operation             --
+    
+    when operation=>
+        mdr:= Content(to_integer(unsigned(mar)));
+        case cir(3 downto 2) is
+        when "00"=>op1:=regA;
+        when "01"=>op1:=regB;
+        when "10"=>op1:=regC;
+        when "11"=>op1:=regD;
+        when others=>sig:=init;
+        end case;
+        sig:=operation1;
+    when operation1=>
+        alu(op1,acc,cir(7 downto 4),res,carry,overflow,zero,Neg);
+        mdr:=res;
+        case cir(1 downto 0) is
+        when "00"=>regA:=mdr;
+        when "01"=>regB:=mdr;
+        when "10"=>regC:=mdr;
+        when "11"=>regD:=mdr;
+        when others=>sig:=init;
+        end case;
+        sig:=fetch;
+
+
+   --             saltos            --
+  --          JUMP            --   -- FUNCIONA
+    when jmp=>
+        pcreg:=mdr(7 downto 0); 
+        sig:=fetch;
+    --          JALR           
+    when jalr=>
+         ret_pc:=pcreg;
+         sig:=jalr2;
+    when jalr2 => 
+         pcreg:=mdr(7 downto 0);
+         sig:=fetch;
+    when ret=>
+        pcreg:= ret_pc;
+        --alu("00000000"&ret_pc,"0000000000000001","0111",pcvar,nu1,nu2,nu3,nu4); -- Aqui se suma el pcreg
+	    --pcreg:=pcvar(7 downto 0);
+        ret_pc:="00000000";
+        sig:=fetch;
+    --          BNZ      -- Compara registro especifico   -- FUNCIONA  
+    when bnz=>
+    dato1:= "0000000000000000";
+    dato2:= regD;
+    enable_cmp <= '1';
+    dato_cmp_1 <= dato1;
+    dato_cmp_2 <= dato2;
+    sig:=bnz2;
+    when bnz2 =>
+    if(eq_cmp = '1') then 
+        sig:=fetch;
+    else
+        pcreg:=mdr(7 downto 0); 
+        sig:=fetch;
+    end if;
+    enable_cmp <= '0';
+    --          BS            -- Compara registro especifico
+    when bs=>
+    dato2 := regD;--:= "1000000000000001";
+    enable_cmp <= '1';
+    dato_cmp_1 <= "0000000000000001";
+    dato_cmp_2 <= "000000000000000"&dato2(15);
+    sig:=bs2;
+    when bs2=>
+    if(eq_cmp = '1') then
+        pcreg:=mdr(7 downto 0); 
+        sig:=fetch; 
+    else
+        sig:=fetch;
+    end if;
+    enable_cmp <= '0';
+     --          BNC            --  Compara la operacion de add anterior si hubo carry
+    when bnc=>
+    if(carry = '1') then 
+        pcreg:=mdr(7 downto 0); 
+        carry := '0';
+    end if;
+    sig:=fetch;
+      --          BNV            -- Compara la operacion add anterior si hubo overflow
+    when bnv=>
+    if(overflow = '1') then 
+        pcreg:=mdr(7 downto 0); 
+        overflow := '0';
+    end if;
+    sig:=fetch;
+   
+    
+    
+    
+    
+    
+    -- SAVE REG
+    when save_regE=>
+    if(validation_regE = '0')then
+        regE:=regA;
+    end if;
+    validation_regE := '1';
+    sig:=fetch;
+    --- CMP
+    when cmp=>
+    case cir(1 downto 0) is
+        when "00"=>dato1:=regA;
+        when "01"=>dato1:=regB;
+        when "10"=>dato1:=regC;
+        when "11"=>dato1:=regD;
+        when others=>sig:=init;
+        end case;
+    case cir(3 downto 2) is
+        when "00"=>dato2:=regA;
+        when "01"=>dato2:=regB;
+        when "10"=>dato2:=regC;
+        when "11"=>dato2:=regD;
+        when others=>sig:=init;
+        end case;
+    enable_cmp <= '1';
+    dato_cmp_1 <= dato1;
+    dato_cmp_2 <= dato2;
+    --enable_cmp <= '0';
+    sig:=cmp2;
+    -- cmp2 --
+    when cmp2 =>
+    sig := fetch;
+    --              move            --
+    when move=>
+    sig:=fetch;
+    --               sendto disp           --
+    when send=>
+            case cir(3 downto 0) is
+                when "0100"=>
+                    case mar(7 downto 0) is
+                        when "00000000"=>letra1<=regA(7 downto 0);--SEND REG TO A LETRA
+                        when "00000001"=>letra2<=regA(7 downto 0);
+                        when "00000010"=>letra3<=regA(7 downto 0);
+                        when "00000011"=>letra4<=regA(7 downto 0);
+                        when "00000100"=>letra5<=regA(7 downto 0);
+                        when "00000101"=>letra6<=regA(7 downto 0);
+                        when "00000110"=>letra7<=regA(7 downto 0);
+                        when "00000111"=>letra8<=regA(7 downto 0);
+                        when "00001000"=>letra9<=regA(7 downto 0);
+                        when "00001001"=>letra10<=regA(7 downto 0);
+                        when "00001010"=>letra11<=regA(7 downto 0);
+                        when "00001011"=>letra12<=regA(7 downto 0);
+                        when "00001100"=>letra13<=regA(7 downto 0);
+                        when "00001101"=>letra14<=regA(7 downto 0);
+                        when "00001111"=>letra15<=regA(7 downto 0);
+                        when "00010000"=>letra16<=regA(7 downto 0);
+                        when others=>sig:=init;
+                    end case;
+                when "0101"=>
+                    case mar(7 downto 0) is
+                            when "00000000"=>letra1<=regB(7 downto 0);
+                            when "00000001"=>letra2<=regB(7 downto 0);
+                            when "00000010"=>letra3<=regB(7 downto 0);
+                            when "00000011"=>letra4<=regB(7 downto 0);
+                            when "00000100"=>letra5<=regB(7 downto 0);
+                            when "00000101"=>letra6<=regB(7 downto 0);
+                            when "00000110"=>letra7<=regB(7 downto 0);
+                            when "00000111"=>letra8<=regB(7 downto 0);
+                            when "00001000"=>letra9<=regB(7 downto 0);
+                            when "00001001"=>letra10<=regB(7 downto 0);
+                            when "00001010"=>letra11<=regB(7 downto 0);
+                            when "00001011"=>letra12<=regB(7 downto 0);
+                            when "00001100"=>letra13<=regB(7 downto 0);
+                            when "00001101"=>letra14<=regB(7 downto 0);
+                            when "00001111"=>letra15<=regB(7 downto 0);
+                            when "00010000"=>letra16<=regB(7 downto 0);
+                            when others=>sig:=init;
+                        end case;
+                when "0110"=>
+                        case mar(7 downto 0) is
+                        when "00000000"=>letra1<=regC(7 downto 0);
+                        when "00000001"=>letra2<=regC(7 downto 0);
+                        when "00000010"=>letra3<=regC(7 downto 0);
+                        when "00000011"=>letra4<=regC(7 downto 0);
+                        when "00000100"=>letra5<=regC(7 downto 0);
+                        when "00000101"=>letra6<=regC(7 downto 0);
+                        when "00000110"=>letra7<=regC(7 downto 0);
+                        when "00000111"=>letra8<=regC(7 downto 0);
+                        when "00001000"=>letra9<=regC(7 downto 0);
+                        when "00001001"=>letra10<=regC(7 downto 0);
+                        when "00001010"=>letra11<=regC(7 downto 0);
+                        when "00001011"=>letra12<=regC(7 downto 0);
+                        when "00001100"=>letra13<=regC(7 downto 0);
+                        when "00001101"=>letra14<=regC(7 downto 0);
+                        when "00001111"=>letra15<=regC(7 downto 0);
+                        when "00010000"=>letra16<=regC(7 downto 0);
+                        when others=>sig:=init;
+                    end case;
+                when "0111"=>
+                    case mar(7 downto 0) is
+                        when "00000000"=>letra1<=regD(7 downto 0);
+                        when "00000001"=>letra2<=regD(7 downto 0);
+                        when "00000010"=>letra3<=regD(7 downto 0);
+                        when "00000011"=>letra4<=regD(7 downto 0);
+                        when "00000100"=>letra5<=regD(7 downto 0);
+                        when "00000101"=>letra6<=regD(7 downto 0);
+                        when "00000110"=>letra7<=regD(7 downto 0);
+                        when "00000111"=>letra8<=regD(7 downto 0);
+                        when "00001000"=>letra9<=regD(7 downto 0);
+                        when "00001001"=>letra10<=regD(7 downto 0);
+                        when "00001010"=>letra11<=regD(7 downto 0);
+                        when "00001011"=>letra12<=regD(7 downto 0);
+                        when "00001100"=>letra13<=regD(7 downto 0);
+                        when "00001101"=>letra14<=regD(7 downto 0);
+                        when "00001111"=>letra15<=regD(7 downto 0);
+                        when "00010000"=>letra16<=regD(7 downto 0);
+                        when others=>sig:=init;
+                    end case;
+            when "1000"=>--perdiste
+                   letra1<=x"B0";
+                   letra2<=x"B0";
+                   letra3<=x"B0";
+                   letra4<=x"B0";
+                   letra5<=x"50";
+                   letra6<=x"65";
+                   letra7<=x"72";
+                   letra8<=x"64";
+                   letra9<=x"69";
+                   letra10<=x"73";
+                   letra11<=x"74";
+                   letra12<=x"65";
+                   letra13<=x"B0";
+                   letra14<=x"B0";
+                   letra15<=x"B0";
+                   letra16<=x"B0";
+            when "1001"=>--ganaste
+                   letra1<=x"B0";
+                   letra2<=x"B0";
+                   letra3<=X"B0";
+                   letra4<=x"B0";
+                   letra5<=x"47";
+                   letra6<=x"61";
+                   letra7<=x"6E";
+                   letra8<=x"61";
+                   letra9<=x"73";
+                   letra10<=x"74";
+                   letra11<=x"65";
+                   letra12<=x"B0";
+                   letra13<=x"B0";
+                   letra14<=x"B0";
+                   letra15<=x"B0";
+                   letra16<=x"B0";
+            when "1010"=>--inicio
+                   letra1<=x"B0";
+                   letra2<=x"B0";
+                   letra3<=x"B0";
+                   letra4<=x"B0";
+                   letra5<=x"B0";
+                   letra6<=x"69";
+                   letra7<=x"6E";
+                   letra8<=x"69";
+                   letra9<=x"63";
+                   letra10<=x"69";
+                   letra11<=x"6F";
+                   letra12<=x"B0";
+                   letra13<=x"B0";
+                   letra14<=x"B0";
+                   letra15<=x"B0";
+                   letra16<=x"B0";
+            --when "1100"=>
+            when "1100"=>
+            when "1101"=>
+            when "1110"=>
+            when "1111"=>    
+        when others=>sal<=(others=>'0');
+        end case;
+    sig:=fetch;
+        
+    when endprog=>
+    case cir(3 downto 0) is
+        when "0000"=>
+        validation_regE:= '0';
+        if(sel=seld) then
+        sig:=endprog;
+        getsal <= '0';
+        else 
+        sig:=init;
+        end if;  
+        when "0100"=>
+        if enter='1' then
+        regA:="00000000"&letra;
+        sig := fetch;
+        else
+        sig:=endprog;
+        end if;
+       when "0101"=>
+       if enter='1' then
+        regB:="00000000"&letra;
+        sig := fetch;
+        else
+        sig:=endprog;
+        end if;
+       when "0110"=>
+       if enter='1' then
+        regC:="00000000"&letra;
+        sig := fetch;
+        else
+        sig:=endprog;
+        end if;
+       when "0111"=>
+       if enter='1' then
+        regD:="00000000"&letra;
+        sig := fetch;
+        else
+        sig:=endprog;
+        end if;
+        when others=>null;
+        
+        end case;
+	when others=>sig:=init;
+	 	
+end case;
+  rg1<=regA;  
+  rg2<=regB;  
+  rg3<=regC;  
+  rg4<=regD;  
+  rg5<=regE;  
+  pcsig<=pcreg;
+  ret_sig<=ret_pc;
+  equal<=eq;
+  estado<=sig;
+               -- clk_30khz <= not clk_30khz;
+   
+end if;
+
+end process;
+
+
+
+
+
+    
+-- initialicepc: process (signalenter,clkf) is begin
+--    if(clkf'event and clkf='1') then
+--    if(entersignal='0' and enterbefore='1') then
+--        initialice<="00011101";
+--    end if;
+--    entersignal<=enterbefore;
+--        end if;
+--    end process;
+    
+--    entersignal<=enter;
+    
+    
+   
 
 end Behavioral;
 
